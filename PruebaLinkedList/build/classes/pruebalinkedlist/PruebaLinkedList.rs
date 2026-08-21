@@ -1,0 +1,3 @@
+pruebalinkedlist.Student
+pruebalinkedlist.LnkdLst
+pruebalinkedlist.PruebaLinkedList
