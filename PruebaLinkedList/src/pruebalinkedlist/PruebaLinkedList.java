@@ -1,4 +1,3 @@
-
 package pruebalinkedlist;
 /*
     @Sergio Carrillo Osorio
@@ -33,7 +32,26 @@ class LnkdLst{
     }
     current.next = newStudent;
   }
+  public void print() {
+      Student current = this.head;
+      while (current !=null){
+          System.out.println(current.name + " - " + current.score);
+          current = current.next;
+      }
+  }
 }
+public class PruebaLinkedList {
+
+    public static void main(String[] args) {
+        LnkdLst lista = new LnkdLst();
+        lista.add("Linus", 90);
+        lista.add("Ada", 95);
+        lista.add("Paul", 78);
+        lista.print();
+    }
+    
+}
+
 public class PruebaLinkedList {
 
     public static void main(String[] args) {
