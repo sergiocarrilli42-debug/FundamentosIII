@@ -51,14 +51,3 @@ public class PruebaLinkedList {
     }
     
 }
-
-public class PruebaLinkedList {
-
-    public static void main(String[] args) {
-        LnkdLst lista = new LnkdLst();
-        lista.add("Linus", 90);
-        lista.add("Ada", 95);
-        lista.add("Paul", 78);
-    }
-    
-}
