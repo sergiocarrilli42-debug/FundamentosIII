@@ -40,6 +40,17 @@ class LnkdLst{
           current = current.next;
       }
   }
+  public Student retrieve (String searchedName){
+      Student current = this.head;
+      while (current!=null){
+          if (current.name.equals(searchedName))
+          {
+              return current;
+          }
+          current = current.next;
+      }
+      return null;
+  }
 }
 public class PruebaLinkedList {
 
@@ -49,6 +60,8 @@ public class PruebaLinkedList {
         lista.add("Ada", 95);
         lista.add("Paul", 78);
         lista.print();
+        Student found = lista.retrieve("Ada");
+        System.out.println("Found:" + found.name +" score :" + found.score);
     }
     
 }
