@@ -51,6 +51,25 @@ class LnkdLst{
       }
       return null;
   }
+  public void remove (int n){
+      if (head == null){
+          return; //Empty List
+      }
+      if (n<0){//Negative index
+          return;
+      }
+      int index = 0;
+      Student current = head;
+      while (current!= null && index <(n-1)){
+          current = current.next;
+          index++;
+      }
+      if (current==null || current.next == null)
+      {
+          return; //position out of range
+      }
+      current.next = current.next.next;
+  }
 }
 public class PruebaLinkedList {
 
