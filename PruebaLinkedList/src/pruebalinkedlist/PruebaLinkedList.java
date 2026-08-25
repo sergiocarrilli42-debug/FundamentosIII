@@ -62,6 +62,10 @@ public class PruebaLinkedList {
         lista.print();
         Student found = lista.retrieve("Ada");
         System.out.println("Found:" + found.name +" score :" + found.score);
+        found = lista.retrieve("Guido");
+        if (found != null){
+            System.out.println("Found:" + found.name+" score:"+found.score);
+        }
     }
     
 }
