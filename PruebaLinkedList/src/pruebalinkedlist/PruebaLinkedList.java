@@ -79,12 +79,19 @@ public class PruebaLinkedList {
         lista.add("Ada", 95);
         lista.add("Paul", 78);
         lista.print();
-        Student found = lista.retrieve("Ada");
-        System.out.println("Found:" + found.name +" score :" + found.score);
-        found = lista.retrieve("Guido");
-        if (found != null){
-            System.out.println("Found:" + found.name+" score:"+found.score);
+        Student s = lista.retrieve("Ada");
+        if (s != null) {
+            System.out.println("Found: " + s.name + " - " + s.score);
+        } else {
+            System.out.println("Student not found");
         }
+        lista.remove(1);
+        System.out.println("After removing the second student:");
+        lista.print();
+        lista.remove(3);
+        System.out.println("After removing the third student");
+        lista.print();
+        
     }
     
 }
