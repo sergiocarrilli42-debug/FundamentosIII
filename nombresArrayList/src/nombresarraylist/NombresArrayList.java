@@ -1,20 +1,34 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
+
 package nombresarraylist;
 
-/**
- *
- * @author sergi
- */
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class NombresArrayList {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
+
+        ArrayList<String> nombres = new ArrayList<>();
+
+        try {
+            File archivo = new File("listado.txt");
+            Scanner scanner = new Scanner(archivo);
+
+            while (scanner.hasNextLine()) {
+                String nombre = scanner.nextLine();
+                nombres.add(nombre);
+            }
+
+            scanner.close();
+
+            System.out.println("Nombres cargados: " + nombres.size());
+
+        } catch (FileNotFoundException e) {
+            System.out.println("No se encontró el archivo listado.txt");
+        }
     }
-    
 }
+
+
