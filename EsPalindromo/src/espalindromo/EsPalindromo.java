@@ -1,20 +1,29 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package espalindromo;
 
-/**
- *
- * @author sergi
- */
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class EsPalindromo {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
+            String cadena = args.length > 0 ? args[0] : "ama";
+            boolean esPalindromo = esPalindromo(cadena);
+            System.out.println("Cadena: " + cadena);
+            System.out.println("¿Es palíndromo? " + esPalindromo);
+        }
+
+    public static boolean esPalindromo(String cadena) {
+        Deque<Character> pila = new ArrayDeque<>();
+       for (char c : cadena.toCharArray()){
+           pila.push(c);
+       }
+       char[] cadenaInvertidaChar = new char[cadena.length()];
+       while(!pila.isEmpty()){
+           cadenaInvertidaChar[cadena.length() - pila.size()] = pila.pop();
+       }
+       String cadenaInvertidaStr = new String(cadenaInvertidaChar);
+        System.out.println("Cadena invertida: " + cadenaInvertidaStr);
+        
+        return cadena.equals(cadenaInvertidaStr);
+        }
     }
-    
-}
