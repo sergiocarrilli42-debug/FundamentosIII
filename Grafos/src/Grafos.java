@@ -191,22 +191,16 @@ public class Grafos {
 
         try {
             java.io.File archivo = new java.io.File(ruta);
-            java.util.Scanner scanner =
-                new java.util.Scanner(archivo);
+            java.util.Scanner scanner = new java.util.Scanner(archivo);
 
             while (scanner.hasNextLine()) {
                 contenido += scanner.nextLine() + "\n";
             }
-
             scanner.close();
 
         } catch (java.io.FileNotFoundException e) {
             System.out.println("Archivo no encontrado: " + ruta);
         }
-
-        return contenido;
-    }
-}
 
         return contenido;
     }
