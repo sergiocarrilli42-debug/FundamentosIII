@@ -1,0 +1,11 @@
+package grafolistas;
+/**
+ *
+ * @author sergi
+ */
+public class GrafoListas {
+
+    public static void main(String[] args) {
+        
+    }
+}
