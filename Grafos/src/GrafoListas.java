@@ -2,6 +2,8 @@
 package grafos;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Stack;
 /**
  *
  * @author sergi
@@ -80,6 +82,60 @@ public class GrafoListas {
                 n.agregarAdyacente(nodoDestino, peso);
                 return;
             }
+        }
+    }
+    private Nodos buscarNodo(String nombre) {
+        for (Nodos n : nodos) {
+            if (n.getNombre().equals(nombre)) {
+                return n;
+            }
+        }
+        return null;
+    }
+    public void DFS(String verticeInicial, String verticeFinal) {
+        Nodos inicio = buscarNodo(verticeInicial);
+        Nodos destino = buscarNodo(verticeFinal);
+
+        if (inicio == null || destino == null) {
+            System.out.println("Uno o ambos vértices no existen en el grafo de listas.");
+            return;
+        }
+
+        System.out.println("Recorrido DFS (Listas) desde " + verticeInicial + " hasta " + verticeFinal + ":");
+        
+        Stack<Nodos> stack = new Stack<>();
+        HashSet<String> visitados = new HashSet<>();
+        
+        stack.push(inicio);
+        boolean encontrado = false;
+
+        while (!stack.isEmpty()) {
+            Nodos actual = stack.pop();
+
+            if (!visitados.contains(actual.getNombre())) {
+                visitados.add(actual.getNombre());
+                System.out.print(actual.getNombre() + " ");
+
+                if (actual.getNombre().equals(destino.getNombre())) {
+                    System.out.println("\nSe ha alcanzado el vertice final.");
+                    encontrado = true;
+                    break;
+                }
+
+                // Agregar los vecinos adyacentes no visitados a la pila
+                ArrayList<Nodos> adyacentes = actual.getAdyacentes();
+                // Recorremos en orden inverso para mantener el orden tradicional de la pila
+                for (int i = adyacentes.size() - 1; i >= 0; i--) {
+                    Nodos vecino = adyacentes.get(i);
+                    if (!visitados.contains(vecino.getNombre())) {
+                        stack.push(vecino);
+                    }
+                }
+            }
+        }
+
+        if (!encontrado) {
+            System.out.println("\nNo se encontro un camino hacia el vertice final.");
         }
     }
 }
