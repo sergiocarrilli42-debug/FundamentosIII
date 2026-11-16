@@ -1,18 +1,11 @@
-
 package grafos;
-
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Stack;
-/**
- *
- * @author sergi
- */
+
 public class GrafoListas {
     ArrayList<Nodos> nodos;
     public GrafoListas(String texto) {
         creaListaVertices(texto);
-        agregaAristas(texto);
+       agregaAristas(texto);
     }
     private void creaListaVertices(String texto) {
         String[] lineas = texto.split("\\R");
@@ -67,11 +60,12 @@ public class GrafoListas {
             }
             String[] extremos = arista.split("--", 2);
             if (extremos.length == 2) {
-                Nodos nodo1 = new Nodos(extremos[0].trim());
-                Nodos nodo2 = new Nodos(extremos[1].trim());
+                Nodos nodo1 = obtenerNodoPorNombre(extremos[0].trim());
+                Nodos nodo2 = obtenerNodoPorNombre(extremos[1].trim());
+                
                 if (nodo1 != null && nodo2 != null) {
-                    agregarAdyacente(nodo1, nodo2, peso);
-                    agregarAdyacente(nodo2, nodo1, peso); // Para grafos no dirigidos
+                    nodo1.agregarAdyacente(nodo2, peso);
+                    nodo2.agregarAdyacente(nodo1, peso); // Para grafos no dirigidos
                 }
             }
         }
@@ -84,58 +78,151 @@ public class GrafoListas {
             }
         }
     }
-    private Nodos buscarNodo(String nombre) {
-        for (Nodos n : nodos) {
-            if (n.getNombre().equals(nombre)) {
-                return n;
+
+    private Nodos obtenerNodoPorNombre(String nombre) {
+        for (Nodos nodo : nodos) {
+            if (nodo.getNombre().equals(nombre)) {
+                return nodo;
             }
         }
-        return null;
-    }
-    public void DFS(String verticeInicial, String verticeFinal) {
-        Nodos inicio = buscarNodo(verticeInicial);
-        Nodos destino = buscarNodo(verticeFinal);
+        return null; // Retorna null si no se encuentra el nodo
+    } 
+    public void DFS(String verticeInicial, String VerticeFinal){
+        int numVertices = nodos.size();
+        boolean[] visitado = new boolean[numVertices];
+        Nodos nodoInicial = obtenerNodoPorNombre(verticeInicial);
+        Nodos nodoFinal = obtenerNodoPorNombre(VerticeFinal);
 
-        if (inicio == null || destino == null) {
-            System.out.println("Uno o ambos vértices no existen en el grafo de listas.");
+        if (nodoInicial == null || nodoFinal == null) {
+            System.out.println("Uno o ambos vertices no existen en el grafo.");
+            return;
+        }
+        System.out.println("Recorrido DFS desde " + verticeInicial + " hasta " + VerticeFinal + ":");
+        java.util.Stack<Nodos> stack = new java.util.Stack<>();
+        stack.push(nodoInicial);
+        while (!stack.isEmpty()) {
+            Nodos nodoActual = stack.pop();
+            if (!nodoActual.isVisitado()) {
+                nodoActual.setVisitado(true);
+                System.out.print(nodoActual.getNombre() + " ");
+                if (nodoActual.getNombre().equals(nodoFinal.getNombre())) {
+                    System.out.println("\nSe ha alcanzado el vertice final.");
+                    return; 
+                }
+            }
+            // Agregar vecinos no visitados al stack
+            for (Nodos vecino : nodoActual.getAdyacentes()) {
+                if (!vecino.isVisitado()) {
+                    stack.push(vecino);
+                }
+            }
+        }
+    }
+    public void BFS(String verticeInicial, String VerticeFinal) {
+        int numVertices = nodos.size();
+        boolean[] visitado = new boolean[numVertices];
+        
+        int indiceInicial = -1;
+        int indiceFinal = -1;
+        for (int i = 0; i < numVertices; i++) {
+            if (nodos.get(i).getNombre().equals(verticeInicial)) indiceInicial = i;
+            if (nodos.get(i).getNombre().equals(VerticeFinal)) indiceFinal = i;
+        }
+
+        if (indiceInicial == -1 || indiceFinal == -1) {
+            System.out.println("Uno o ambos vertices no existen en el grafo.");
             return;
         }
 
-        System.out.println("Recorrido DFS (Listas) desde " + verticeInicial + " hasta " + verticeFinal + ":");
-        
-        Stack<Nodos> stack = new Stack<>();
-        HashSet<String> visitados = new HashSet<>();
-        
-        stack.push(inicio);
-        boolean encontrado = false;
+        System.out.println("Recorrido BFS desde " + verticeInicial + " hasta " + VerticeFinal + ":");
+        java.util.Queue<Integer> queue = new java.util.LinkedList<>();
+        queue.add(indiceInicial); 
 
-        while (!stack.isEmpty()) {
-            Nodos actual = stack.pop();
-
-            if (!visitados.contains(actual.getNombre())) {
-                visitados.add(actual.getNombre());
-                System.out.print(actual.getNombre() + " ");
-
-                if (actual.getNombre().equals(destino.getNombre())) {
+        while (!queue.isEmpty()) {
+            int indiceActual = queue.poll();
+            if (!visitado[indiceActual]) {
+                visitado[indiceActual] = true;
+                System.out.print(nodos.get(indiceActual).getNombre() + " ");
+                if (indiceActual == indiceFinal) {
                     System.out.println("\nSe ha alcanzado el vertice final.");
-                    encontrado = true;
-                    break;
+                    return; 
                 }
+            }
+            
+            // Recorremos los vecinos usando la lista de adyacencia del nodo actual
+            Nodos actualObj = nodos.get(indiceActual);
+            for (Nodos vecinoObj : actualObj.getAdyacentes()) {
+                int i = nodos.indexOf(vecinoObj);
+                if (i != -1 && !visitado[i]) {
+                    queue.add(i);
+                }
+            }
+        }
+    }
 
-                // Agregar los vecinos adyacentes no visitados a la pila
-                ArrayList<Nodos> adyacentes = actual.getAdyacentes();
-                // Recorremos en orden inverso para mantener el orden tradicional de la pila
-                for (int i = adyacentes.size() - 1; i >= 0; i--) {
-                    Nodos vecino = adyacentes.get(i);
-                    if (!visitados.contains(vecino.getNombre())) {
-                        stack.push(vecino);
+    public String caminoMasCorto(String verticeInicial, String verticeFinal) {
+        int numVertices = nodos.size();
+        int inicio = -1;
+        int destino = -1;
+        for (int i = 0; i < numVertices; i++) {
+            if (nodos.get(i).getNombre().equals(verticeInicial)) inicio = i;
+            if (nodos.get(i).getNombre().equals(verticeFinal)) destino = i;
+        }
+
+        if (inicio == -1 || destino == -1) {
+            return "Uno o ambos vertices no existen en el grafo.";
+        }
+
+        int[] distancia = new int[numVertices];
+        int[] anterior = new int[numVertices];
+        boolean[] definitivo = new boolean[numVertices];
+        
+        java.util.Arrays.fill(distancia, Integer.MAX_VALUE);
+        java.util.Arrays.fill(anterior, -1);
+        distancia[inicio] = 0;
+
+        for (int paso = 0; paso < numVertices; paso++) {
+            int actual = -1;
+            for (int i = 0; i < numVertices; i++) {
+                if (!definitivo[i] && distancia[i] != Integer.MAX_VALUE
+                        && (actual == -1 || distancia[i] < distancia[actual])) {
+                    actual = i;
+                }
+            }
+            if (actual == -1) {
+                break; 
+            }
+            if (actual == destino) {
+                break; 
+            }
+            definitivo[actual] = true;
+
+            // Revisamos los vecinos del nodo actual
+            Nodos actualObj = nodos.get(actual);
+            for (Nodos vecinoObj : actualObj.getAdyacentes()) {
+                int vecino = nodos.indexOf(vecinoObj);
+                int peso = vecinoObj.getPeso();
+
+                if (vecino != -1 && peso > 0 && !definitivo[vecino]
+                        && distancia[actual] <= Integer.MAX_VALUE - peso) {
+                    int nuevaDistancia = distancia[actual] + peso;
+                    if (nuevaDistancia < distancia[vecino]) {
+                        distancia[vecino] = nuevaDistancia;
+                        anterior[vecino] = actual;
                     }
                 }
             }
         }
 
-        if (!encontrado) {
-            System.out.println("\nNo se encontro un camino hacia el vertice final.");
+        if (distancia[destino] == Integer.MAX_VALUE) {
+            return "No existe un camino entre " + verticeInicial + " y " + verticeFinal + ".";
         }
+
+        java.util.LinkedList<String> camino = new java.util.LinkedList<>();
+        for (int actual = destino; actual != -1; actual = anterior[actual]) {
+            camino.addFirst(nodos.get(actual).getNombre());
+        }
+        return "Camino mas corto: " + String.join(" -> ", camino)
+                + " (costo total: " + distancia[destino] + ")";
     }
 }
