@@ -18,6 +18,12 @@ public class Grafos {
         System.out.println("GrafoListas");
         GrafoListas grafoListas = new GrafoListas(texto);
         grafoListas.display();
+        System.out.println("---DFS GrafoListas---");
+        grafoListas.DFS("Arcangel", "Sergio");
+        System.out.println("---BFS GrafoListas---");
+        grafoListas.BFS("Arcangel", "Sergio");
+        String caminoListas = grafoListas.caminoMasCorto("Arcangel", "Sergio");
+        System.out.println(caminoListas);
     }
 
     public static String cargaArchivo(String ruta) {
